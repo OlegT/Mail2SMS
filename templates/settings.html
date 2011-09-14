@@ -1,0 +1,518 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="HandheldFriendly" content="true" />
+<title>Settings</title>
+<link type="text/css" rel="stylesheet" href="css/styles/form.css?v3.1.110"/>
+<link href="css/calendarview.css?v3.1.110" rel="stylesheet" type="text/css" />
+ 
+<style type="text/css">
+    .form-label{
+        width:150px !important;
+    }
+    .form-label-left{
+        width:150px !important;
+    }
+    .form-line{
+        padding:10px;
+    }
+    .form-label-right{
+        width:150px !important;
+    }
+    .form-all{
+        width:1164px;
+        background:rgb(241, 241, 241);
+        color:black !important;
+        font-family:Verdana;
+        font-size:18px;
+    }
+</style>
+
+<script src="js/prototype.js?v=3.1.110" type="text/javascript"></script>
+<script src="js/protoplus.js?v=3.1.110" type="text/javascript"></script>
+<script src="js/protoplus-ui.js?v=3.1.110" type="text/javascript"></script>
+<script src="js/jotform.js?v=3.1.110" type="text/javascript"></script>
+<script src="js/calendarview.js?v=3.1.110" type="text/javascript"></script>
+<script type="text/javascript">
+   JotForm.init(function(){
+      $('input_1').hint('myname@gmail.com');
+      $('input_2').hint('myname@gmail.com');
+      $('input_3').hint('myname@gmail.com');
+      $('input_10').hint('myname@gmail.com');
+      $('NameC').hint('default');
+      $('TimeZone').hint('3');
+   });
+</script>
+</head>
+<body>
+
+<a href="..">Главная</a> <a href="settings">Настройка</a> <a href="logs">Logs</a><br>
+
+<form class="jotform-form" action="/settings" method="post" name="form_10922249744" id="10922249744" accept-charset="utf-8">
+    <input type="hidden" name="formID" value="10922249744" />
+    <div class="form-all">
+
+
+<table width="100%" border="1" bordercolor="gray" cellspacing="1" cellpadding="1"> 
+	<tr> 
+           <td width="50%" valign="top">   
+             
+
+ 
+        <ul class="form-section">
+
+
+
+
+
+
+
+
+
+
+
+            <li id="cid_9" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_9" class="form-header">
+                        Введите E-mail и пароль для мониторинга
+                    </h3>
+                </div>
+            </li>
+
+
+
+            <li class="form-line form-line-column" id="id_10">
+                <label class="form-label-top" id="label_10" for="input_10">  </label>
+                <div id="cid_10" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_10_0" name="check_1" {{check_1}} value="checked" />
+                            <label for="input_10_0">  </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_11">
+                <label class="form-label-top" id="label_11" for="input_11"> E-mail 1: </label>
+                <div id="cid_11" class="form-input-wide">
+                    <input type="email" class="form-textbox validate[Email]" id="input_1" name="input_1" size="30" value="{{input_1}}"/>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_12">
+                <label class="form-label-top" id="label_12" for="input_12"> Пароль 1: </label>
+                <div id="cid_12" class="form-input-wide">
+                    <input type="password" class="form-textbox" id="psw_1" name="psw_1" size="35" value="{{psw_1}}" />
+                </div>
+            </li>
+
+            
+                <div class="form-header-groupH">
+                    
+                </div>
+            
+
+
+            <li class="form-line form-line-column" id="id_13">
+                <label class="form-label-top" id="label_13" for="input_13">  </label>
+                <div id="cid_13" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_13_0" name="check_2" {{check_2}} value="checked" />
+                            <label for="input_13_0">  </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_14">
+                <label class="form-label-top" id="label_14" for="input_14"> E-mail 2: </label>
+                <div id="cid_14" class="form-input-wide">
+                    <input type="email" class="form-textbox validate[Email]" id="input_2" name="input_2" size="30" value="{{input_2}}"/>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_15">
+                <label class="form-label-top" id="label_15" for="input_15"> Пароль 2: </label>
+                <div id="cid_15" class="form-input-wide">
+                    <input type="password" class="form-textbox" id="psw_2" name="psw_2" size="35" value="{{psw_2}}" />
+                </div>
+            </li>
+
+
+                <div class="form-header-groupH">
+                    
+                </div>
+
+
+            <li class="form-line form-line-column" id="id_16">
+                <label class="form-label-top" id="label_16" for="input_16">  </label>
+                <div id="cid_16" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_16_0" name="check_3" {{check_3}} value="checked" />
+                            <label for="input_16_0">  </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_17">
+                <label class="form-label-top" id="label_17" for="input_17"> E-mail 3: </label>
+                <div id="cid_17" class="form-input-wide">
+                    <input type="email" class="form-textbox validate[Email]" id="input_3" name="input_3" size="30" value="{{input_3}}"/>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_18">
+                <label class="form-label-top" id="label_18" for="input_18"> Пароль 3: </label>
+                <div id="cid_18" class="form-input-wide">
+                    <input type="password" class="form-textbox" id="psw_3" name="psw_3" size="35" value="{{psw_3}}" />
+                </div>
+            </li>
+
+            <li id="cid_19" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_19" class="form-header">
+                        Введите E-mail и пароль для отправки SMS
+                    </h3>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_20">
+                <label class="form-label-top" id="label_20" for="input_20">  </label>
+                <div id="cid_20" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_20_0" name="check_10" {{check_10}} value="checked" />
+                            <label for="input_20_0"> Вкл. SMS </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_21">
+                <label class="form-label-top" id="label_21" for="input_21"> E-mail: </label>
+                <div id="cid_21" class="form-input-wide">
+                    <input type="email" class="form-textbox validate[Email]" id="input_10" name="input_10" size="23" value="{{input_10}}"/>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_22">
+                <label class="form-label-top" id="label_22" for="input_22"> Пароль: </label>
+                <div id="cid_22" class="form-input-wide">
+                    <input type="password" class="form-textbox" id="psw_10" name="psw_10" size="27" value="{{psw_10}}" />
+                </div>
+            </li>
+
+
+
+                <div class="form-header-groupH">
+                    
+                </div>
+
+            <label>&nbsp; Проверять почту каждую(ые)</label>
+            <input type="text" id="Time_Mail" name="Time_Mail" size="3" value="{{Time_Mail}}" />
+            <label>мин.</label>
+
+
+
+
+
+            <li id="cid_28" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_28" class="form-header">
+                        Укажите, какую информацию присылать
+                    </h3>
+                </div>
+            </li>
+
+            <li class="form-line" id="id_29">
+                <label class="form-label-left" id="label_29" for="input_29">  </label>
+                <div id="cid_29" class="form-input">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_29_0" name="check_Title" {{check_Title}} value="checked"/>
+                            <label for="input_29_0"> Тема письма </label></span><span class="clearfix"></span><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_29_1" name="check_Summary" {{check_Summary}} value="checked" />
+                            <label for="input_29_1"> Содержимое письма </label></span><span class="clearfix"></span><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_29_2" name="check_Name" {{check_Name}} value="checked" />
+                            <label for="input_29_2"> Имя отправителя </label></span><span class="clearfix"></span><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_29_3" name="check_Email" {{check_Email}} value="checked"/>
+                            <label for="input_29_3"> E-mail отправителя </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+
+            <li id="cid_30" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_30" class="form-header">
+                        Ночной режим
+                    </h3>
+                </div>
+            </li>
+
+
+
+           <li class="form-line form-line-column" id="id_31">
+                <label class="form-label-top" id="label_31" for="input_31">  </label>
+                <div id="cid_31" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_131_0" name="check_Night" {{check_Night}} value="checked" />
+                            <label for="input_31_0"> Вкл. ночной режим </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+                <div class="form-header-groupH">
+                    
+                </div>
+
+
+
+            <li class="form-line form-line-column" id="id_32">
+                <label class="form-label-top" id="label_32" for="input_32"> Начало: </label>
+                <div id="cid_32" class="form-input">
+                    <input type="text" id="Time1" name="Time1" size="5" value="{{Time1}}" />
+                </div>
+            </li>
+
+
+            <li class="form-line form-line-column" id="id_32">
+                <label class="form-label-top" id="label_33" for="input_32"> Конец: </label>
+                <div id="cid_33" class="form-input">
+                    <input type="text" id="Time2" name="Time2" size="5" value="{{Time2}}" />
+                </div>
+            </li>
+
+
+            <li class="form-line form-line-column" id="id_33">
+                <label class="form-label-top" id="label_34" for="input_33"> Часовой пояс: </label>
+                <div id="cid_34" class="form-input">
+                    <input type="text" id="TimeZone" name="TimeZone" size="5" value="{{TimeZone}}" />
+                </div>
+            </li>
+
+
+
+
+            <li id="cid_40" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_30" class="form-header">
+                        Какой календарь использовать?
+                    </h3>
+                </div>
+            </li>
+
+
+            <li class="form-line form-line-column" id="id_11">
+                <label class="form-label-top" id="label_11" for="input_11"> Укажите <a href="http://www.youtube.com/watch?v=m_ph_hYT_SY">Calendar ID</a>: </label>
+                <div id="cid_11" class="form-input-wide">
+                    <input type="text" id="NameC" name="NameC" size="30" value="{{NameC}}" />
+                </div>
+            </li>
+
+
+
+            <li id="cid_50" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_30" class="form-header">
+                        Настройка логирования
+                    </h3>
+                </div>
+            </li>
+
+                <div class="form-header-groupH">
+                    
+                </div>
+
+
+            <li class="form-line form-line-column" id="id_31">
+                <label class="form-label-top" id="label_31" for="input_31">  </label>
+                <div id="cid_31" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_31_0" name="check_Log" {{check_Log}} value="checked"/>
+                            <label for="input_31_0"> Вкл. логирование </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+
+
+
+
+
+	   </td>
+
+           <td width="50%" valign="top">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li id="cid_23" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_23" class="form-header">
+                        Настройка белого и черного списка
+                    </h3>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_26">
+                <label class="form-label-top" id="label_26" for="input_26">  </label>
+                <div id="cid_26" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_26_0" name="check_white" {{check_white}} value="checked" />
+                            <label for="input_26_0"> Вкл. белый список </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_27">
+                <label class="form-label-top" id="label_27" for="input_27">  </label>
+                <div id="cid_27" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_27_0" name="check_black" {{check_black}} value="checked" />
+                            <label for="input_27_0"> Вкл. черный список </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+
+                <div class="form-header-groupH">
+                    
+                </div>
+
+
+
+            <li class="form-line form-line-column" id="id_24">
+                <label class="form-label-top" id="label_24" for="input_24"> Белый список e-mail'ов </label>
+                <div id="cid_24" class="form-input-wide">
+                    <textarea id="input_white" class="form-textarea" name="input_white" cols="30" rows="6">{{input_white}}</textarea>
+                </div>
+            </li>
+
+            <li class="form-line form-line-column" id="id_25">
+                <label class="form-label-top" id="label_25" for="input_25"> Черный список e-mail'ов </label>
+                <div id="cid_25" class="form-input-wide">
+                    <textarea id="input_black" class="form-textarea" name="input_black" cols="30" rows="6">{{input_black}}</textarea>
+                </div>
+            </li>
+
+                <div class="form-header-groupH">
+                    
+                </div>
+
+
+
+
+
+
+
+
+
+            <li id="cid_30" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_30" class="form-header">
+                        Twitter/RSS
+                    </h3>
+                </div>
+            </li>
+
+           <li class="form-line form-line-column" id="id_31">
+                <label class="form-label-top" id="label_31" for="input_31">  </label>
+                <div id="cid_31" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_131_0" name="check_Twitter" {{check_Twitter}} value="checked" />
+                            <label for="cid_31"> Вкл. Twitter/RSS </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="form-line form-line-column" id="id_25">
+                <label class="form-label-top" id="label_25" for="input_25"> Список запросов в Twitter и RSS </label>
+                <div id="cid_25" class="form-input-wide">
+                    <textarea warp="off" id="input_Twitter" class="form-textarea" name="input_Twitter" cols="66" rows="10">{{input_Twitter}}</textarea>
+                </div>
+            </li>
+
+            
+                <div class="form-header-groupH">
+                    
+                </div>
+
+            <label>&nbsp; Проверять Twitter/RSS каждую(ые)</label>
+            <input type="text" id="Time_Twitter" name="Time_Twitter" size="3" value="{{Time_Twitter}}" />
+            <label>мин.</label>
+
+
+
+            <li id="cid_30" class="form-input-wide">
+                <div class="form-header-group">
+                    <h3 id="header_30" class="form-header">
+                        Циклическая смена аккаунтов
+                    </h3>
+                </div>
+            </li>
+
+           <li class="form-line form-line-column" id="id_31">
+                <label class="form-label-top" id="label_31" for="input_31">  </label>
+                <div id="cid_31" class="form-input-wide">
+                    <div class="form-single-column"><span class="form-checkbox-item" style="clear:left;"><input type="checkbox" class="form-checkbox" id="input_131_0" name="check_Circle" {{check_Circle}} value="checked" />
+                            <label for="input_31_0"> Вкл. </label></span><span class="clearfix"></span>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="form-line form-line-column" id="id_25">
+                <label class="form-label-top" id="label_25" for="input_25"> Список <p style="font-size: 12px">myname@gmail.com:password:CalendarID</p>  </label>
+                <div id="cid_25" class="form-input-wide">
+                    <textarea warp="off" id="CircleAccounts" class="form-textarea" name="CircleAccounts" cols="55" rows="10">{{CircleAccounts}}</textarea>
+                </div>
+            </li>
+
+            
+
+
+
+
+
+  
+	   </td> 
+       </tr>  
+</table>        
+
+
+
+
+
+
+            <li class="form-line" id="id_7">
+                <div id="cid_7" class="form-input-wide">
+                    <div style="text-align:center" class="form-buttons-wrapper">
+                        <button id="input_7" type="submit" class="form-submit-button">
+                            Сохранить
+                        </button>
+                    </div>
+                </div>
+            </li>
+            <li style="display:none">
+                Should be Empty:
+                <input type="text" name="website" value="" />
+            </li>
+        </ul>
+    </div>
+    <input type="hidden" id="simple_spc" name="simple_spc" value="10922249744" />
+    <script type="text/javascript">
+        document.getElementById("si" + "mple" + "_spc").value = "10922249744-10922249744";
+    </script>
+</form>
+<br>
+
+Application: Mail2SMS for Gmail.com &nbsp; (Version: 4)<br>
+<a href="http://bit.ly/SMSForum"><img src="http://bit.ly/ImageVer4" /></a>
+<br>
+
+
+License:&nbsp;<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Лицензия Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a> &nbsp;
+
+Author:&nbsp;<a href="http://twitter.com/OlegT_"><img src="http://bit.ly/TwitterImg" width="20" height="20"/><strong>Oleg</strong></a>  &nbsp;
+
+Distribution: <a href="mailto:vlad.kras@gmail.com"> <img src="http://favicon.yandex.ru/favicon/www.gmail.com.br" /> <strong>VladKras</strong></a>&nbsp;
+
+
+
+</body>
+</html>

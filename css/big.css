@@ -1,0 +1,46 @@
+/*
+ *Form CSS
+ */
+.form-all{
+    background:#F1F1F1 url(../../images/big-back.png) repeat-x;
+    color: Black;
+    font-family: Verdana;
+    font-size: 18px;
+}
+
+
+.form-textbox, .form-textarea, .form-dropdown{
+    -moz-border-radius:4px 4px;
+    -webkit-border-radius:4px 4px;
+    border-radius:4px 4px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2) inset;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2) inset;
+    background-color: #FFFFFF;
+    border-color: #545151 #888888 #E1E1E1;
+    border-style: solid;
+    border-width: 1px;
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 18px;
+    padding: 8px 4px;
+}
+.form-radio, .form-checkbox{
+    height:20px;
+    width:20px;
+}
+.form-submit-button, .form-submit-reset, .form-submit-print{
+    -moz-border-radius:4px 4px;
+    -webkit-border-radius:4px 4px;
+    border-radius:4px 4px;
+    padding:8px 4px;
+    border-color:#7C7C7C #C3C3C3 #DDDDDD;
+    background:#f7f7f7;
+    border-style:outset;
+    border-width:1px;
+    color:#333333;
+    font-size:14px;
+    font-weight:bold;
+    line-height:18px;
+}

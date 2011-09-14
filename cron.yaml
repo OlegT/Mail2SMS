@@ -1,0 +1,4 @@
+cron:
+- description: Check the emails
+  url: /update
+  schedule: every 1 minutes

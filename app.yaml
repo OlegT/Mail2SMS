@@ -1,0 +1,31 @@
+application: mail2sms
+version: 4
+runtime: python
+api_version: 1
+
+handlers:
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js
+
+- url: /favicon.ico
+  mime_type: image/gif 
+  static_files: favicon.ico
+  upload: favicon.ico
+
+- url: /
+  script: mailcheck.py
+
+- url: /logs
+  script: mailcheck.py
+
+- url: /update
+  script: mailcheck.py
+  login: admin
+
+- url: /settings
+  script: mailcheck.py
+  login: admin
+
