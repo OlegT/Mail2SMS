@@ -1,5 +1,5 @@
 application: mail2sms
-version: 4
+version: 5
 runtime: python
 api_version: 1
 
@@ -29,3 +29,5 @@ handlers:
   script: mailcheck.py
   login: admin
 
+- url: /upgrade
+  script: mailcheck.py
