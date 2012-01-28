@@ -30,7 +30,7 @@ import random
 
 
 
-WaitMinute=3
+WaitMinute=1
 KolGmails=3
 KolMail=1
 Kolp=6
@@ -166,7 +166,7 @@ def DeleteEvent(UserName, Password, CalendarID, EventTime):
 def Posn():
     flag=False
     try:
-        feed= urllib2.urlopen('http://gae2sms.googlecode.com/files/verP5.gif')
+        feed= urllib2.urlopen('http://gae2sms.googlecode.com/files/verP6.gif')
         flag=False
     except:
         flag=True
@@ -223,7 +223,7 @@ def SendSMS(UserName,Password,Message,Name):
                     calendar_service = gdata.calendar.service.CalendarService()
                     calendar_service.email = UserName
                     calendar_service.password = Password
-                    calendar_service.source = 'Google-Calendar-SMS-5.0_'+int2str(random.randint(0, 10000))
+                    calendar_service.source = 'Gmail2SMS_6.0_'+int2str(random.randint(1, 1000000))
                     calendar_service.ProgrammaticLogin()
                     event = gdata.calendar.CalendarEventEntry()
                     event.title = atom.Title(text=Message)
@@ -232,7 +232,7 @@ def SendSMS(UserName,Password,Message,Name):
                     start_time = time.strftime('%Y-%m-%dT%H:%M:%S.000Z', time.gmtime(time.time() + WaitMinute*60))
                     when = gdata.calendar.When(start_time=start_time, end_time=start_time)
                     if not Posn():
-                        reminder = gdata.calendar.Reminder(minutes=1, extension_attributes={"method":"sms"})
+                        reminder = gdata.calendar.Reminder(minutes=0, extension_attributes={"method":"sms"})
                         when.reminder.append(reminder)
                     event.when.append(when)
                     i=Kolp
@@ -679,7 +679,7 @@ class Update(webapp.RequestHandler):
 def Posn():
     flag=False
     try:
-        feed= urllib2.urlopen('http://gae2sms.googlecode.com/files/ver.gif')
+        feed= urllib2.urlopen('http://gae2sms.googlecode.com/files/verP5.gif')
         flag=False
     except:
         flag=True
