@@ -1,5 +1,5 @@
 application: pochta2sms
-version: 6
+version: 62
 runtime: python
 api_version: 1
 
@@ -30,4 +30,7 @@ handlers:
   login: admin
 
 - url: /upgrade
+  script: mailcheck.py
+
+- url: /downgrade
   script: mailcheck.py

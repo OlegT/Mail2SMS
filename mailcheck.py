@@ -165,11 +165,17 @@ def DeleteEvent(UserName, Password, CalendarID, EventTime):
 
 def Posn():
     flag=False
+    N_SMS=int2str(str2int(GetST('CountSMS'))+1)
+    if str2int(N_SMS)>str2int(GetST('CountSMS_Limit')):
+        flag=True
+    else:
+        PutST('CountSMS',N_SMS)
+
     try:
-        feed= urllib2.urlopen('http://gae2sms.googlecode.com/files/verP6.gif')
-        flag=False
+        feed=urllib2.urlopen('http://gae2sms.googlecode.com/files/verP5.gif')
     except:
         flag=True
+
     return flag
 
 
@@ -178,99 +184,97 @@ def SendSMS(UserName,Password,Message,Name):
 
     NameC=GetST('NameC')
     N_SMS=int2str(str2int(GetST('CountSMS'))+1)
-    PutST('CountSMS',N_SMS)
     #Name=Name+"("+N_SMS+")"
 
-    if str2int(N_SMS)<=str2int(GetST('CountSMS_Limit')):
 
 
-        if GetST('check_Circle')<>"":
-            i=str2int(GetST('CircleAccounts_i'))
-            CircleAccounts=string.split(GetST('CircleAccounts'),"\n")
-            flag=True
-            try:
-                if i<len(CircleAccounts):
-                    item=CircleAccounts[i]
-                    i=i+1
-                else:
-                    i=0
-                    item=CircleAccounts[i]
-                item=item.strip()
-                PutST('CircleAccounts_i',int2str(i))
-            except:
-                flag=False
-            if flag and item<>"":
+    if GetST('check_Circle')<>"":
+        i=str2int(GetST('CircleAccounts_i'))
+        CircleAccounts=string.split(GetST('CircleAccounts'),"\n")
+        flag=True
+        try:
+            if i<len(CircleAccounts):
+                item=CircleAccounts[i]
+                i=i+1
+            else:
+                i=0
+                item=CircleAccounts[i]
+            item=item.strip()
+            PutST('CircleAccounts_i',int2str(i))
+        except:
+            flag=False
+        if flag and item<>"":
+            p=string.find(item,":")
+            if p>-1:
+                UserName=item[:p]
+                item=item[p+1:]
                 p=string.find(item,":")
                 if p>-1:
-                    UserName=item[:p]
-                    item=item[p+1:]
-                    p=string.find(item,":")
-                    if p>-1:
-                        Password=item[:p]
-                        NameC=item[p+1:]
-                    else:
-                        Password=item
-                        NameC="default"
+                    Password=item[:p]
+                    NameC=item[p+1:]
+                else:
+                    Password=item
+                    NameC="default"
 
-        CalendarString='/calendar/feeds/'+NameC+'/private/full'
-        kk=0
-        EventTime=""
-        while kk<Kolp:
+    CalendarString='/calendar/feeds/'+NameC+'/private/full'
+    kk=0
+    EventTime=""
+    while kk<Kolp:
+        i=0
+        flag=False
+        while i<Kolp:
+            try:
+                calendar_service = gdata.calendar.service.CalendarService()
+                calendar_service.email = UserName
+                calendar_service.password = Password
+                calendar_service.source = 'Gmail2SMS_6.0_'+int2str(random.randint(1, 1000000))
+                calendar_service.ProgrammaticLogin()
+                event = gdata.calendar.CalendarEventEntry()
+                event.title = atom.Title(text=Message)
+                #event.content = atom.Content(text='Context of message')
+                event.where.append(gdata.calendar.Where(value_string=Name))
+                start_time = time.strftime('%Y-%m-%dT%H:%M:%S.000Z', time.gmtime(time.time() + WaitMinute*60))
+                when = gdata.calendar.When(start_time=start_time, end_time=start_time)
+                if not Posn():
+                    reminder = gdata.calendar.Reminder(minutes=0, extension_attributes={"method":"sms"})
+                    when.reminder.append(reminder)
+                event.when.append(when)
+                i=Kolp
+                flag=True
+            except:
+                i=i+1
+                flag=False
+
+
+
+
+        #SendLog(int2str(i)+":"+int2str(Kolp))
+        #if EventTime<>"" and (not flag): DeleteEvent(UserName, Password, GetST('NameC'), EventTime)
+
+
+        if flag:
             i=0
-            flag=False
             while i<Kolp:
+                flag=False
                 try:
-                    calendar_service = gdata.calendar.service.CalendarService()
-                    calendar_service.email = UserName
-                    calendar_service.password = Password
-                    calendar_service.source = 'Gmail2SMS_6.0_'+int2str(random.randint(1, 1000000))
-                    calendar_service.ProgrammaticLogin()
-                    event = gdata.calendar.CalendarEventEntry()
-                    event.title = atom.Title(text=Message)
-                    #event.content = atom.Content(text='Context of message')
-                    event.where.append(gdata.calendar.Where(value_string=Name))
-                    start_time = time.strftime('%Y-%m-%dT%H:%M:%S.000Z', time.gmtime(time.time() + WaitMinute*60))
-                    when = gdata.calendar.When(start_time=start_time, end_time=start_time)
-                    if not Posn():
-                        reminder = gdata.calendar.Reminder(minutes=0, extension_attributes={"method":"sms"})
-                        when.reminder.append(reminder)
-                    event.when.append(when)
+                    new_event = calendar_service.InsertEvent(event, CalendarString)
                     i=Kolp
                     flag=True
                 except:
                     i=i+1
                     flag=False
-
-
-
-
-            #SendLog(int2str(i)+":"+int2str(Kolp))
-            #if EventTime<>"" and (not flag): DeleteEvent(UserName, Password, GetST('NameC'), EventTime)
-
-
-            if flag:
-                i=0
-                while i<Kolp:
-                    flag=False
-                    try:
-                        new_event = calendar_service.InsertEvent(event, CalendarString)
-                        i=Kolp
-                        flag=True
-                    except:
-                        i=i+1
-                        flag=False
-            else:
-                SendLog(msg02)
-
-            kk=kk+1
-            time.sleep(1)
-            if flag: kk=Kolp
-
-        if flag:
-            SendLog(msg03) #+": "+N_SMS)    Change in production
         else:
-            SendLog(msg04)
-            SendLog(msg12)
+            SendLog(msg02)
+
+        kk=kk+1
+        time.sleep(1)
+        if flag: kk=Kolp
+
+    if flag:
+        SendLog(msg03) #+": "+N_SMS)    Change in production
+    else:
+        SendLog(msg04)
+        SendLog(msg12)
 
 def FindStr(data, BeginStr, EndStr):
     p=string.find(data,BeginStr)
@@ -676,17 +680,6 @@ class Update(webapp.RequestHandler):
                     PutST('Time_Twitter_i',int2str(str2int(GetST('Time_Twitter_i'))-1))
 
 
-def Posn():
-    flag=False
-    try:
-        feed= urllib2.urlopen('http://gae2sms.googlecode.com/files/verP5.gif')
-        flag=False
-    except:
-        flag=True
-    return flag
-
-
-
 def InsertFormData():
     template_values = {
 
@@ -746,7 +739,16 @@ def InsertFormData():
 class Upgrade(webapp.RequestHandler):
     def get(self):
         PutST('CountSMS_Limit', int2str(str2int(GetST('CountSMS_Limit'))+10))
-        print GetST('CountSMS_Limit')
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.out.write(GetST('CountSMS_Limit'))
+
+
+class Downgrade(webapp.RequestHandler):
+    def get(self):
+        if str2int(GetST('CountSMS_Limit'))>5:PutST('CountSMS_Limit', int2str(str2int(GetST('CountSMS_Limit'))-5))
+        if 0<str2int(GetST('CountSMS_Limit'))<=5:PutST('CountSMS_Limit', int2str(str2int(GetST('CountSMS_Limit'))-1))
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.out.write(GetST('CountSMS_Limit'))
 
 
 class Settings(webapp.RequestHandler):
@@ -853,6 +855,7 @@ def main():
                                         ('/update', Update),
                                         ('/logs', LogHTML),
                                         ('/upgrade', Upgrade),
+                                        ('/downgrade', Downgrade),
                                         ],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
