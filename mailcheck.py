@@ -37,21 +37,21 @@ Kolp=6
 
 
 
-msg00=u"SMS не отправлено. Номер мобильного должен быть подтвержен в настройках Google Calendar."
-msg01=u"Неверная строка запроса: "
-msg02=u"Мероприятие не создалось."
-msg03=u"SMS отправлено"
-msg04=u"Не удалось отправить SMS."
-msg05=u"Не могу подключиться к "
-msg06=u"Ночной режим. SMS не отправлено."
-msg07=u"Письмо не прошло фильтр: "
-msg08=u"Не верный пароль для "
-msg09=u"Настройки сохранены."
-msg10=u"У вас "
-msg11=u" непрочитанных сообщений"
-msg12=u"Проверьте пароль, Calendar ID"
-msg13=u"Вам пришло письмо"
-
+msg00=u"SMS is not sent. Mobile number has to be confirmed in the settings Google Calendar."
+msg01=u"Invalid query string: "
+msg02=u"The event is not created."
+msg03=u"SMS sent"
+msg04=u"Unable to send SMS."
+msg05=u"I can not connect to "
+msg06=u"Night mode. SMS is not sent."
+msg07=u"The letter did not pass the filter: "
+msg08=u"Invalid password for "
+msg09=u"Settings saved."
+msg10=u"You have "
+msg11=u" unread messages"
+msg12=u"Check the password, Calendar ID"
+msg13=u"You have new mail."
+msg14=u"Error removing the event from the calendar."
 
 class settingsbd(db.Model):
   keyS = db.StringProperty()
@@ -82,11 +82,14 @@ def GetST_Store(key):
         if key=="NoConnection_i":   value="0"
         if key=="CountSMS":         value="0"
         if key=="CountSMS_Date":    value=""
-        if key=="CountSMS_Limit":   value="10"
+        if key=="CountSMS_Limit":   value="15"
         if key=="CircleAccounts":   value=""
         if key=="CircleAccounts_i": value="0"
+        if key=="ID_Event":         value=""
+        if key=="ID_Event2":         value=""
 
     return value
+
 
 
 
@@ -147,32 +150,30 @@ def str2int(s):
 
 
 
-def DeleteEvent(UserName, Password, CalendarID, EventTime):
+def DeleteEvent(UserName, Password, CalendarID, text_query):
+    calendar_service = gdata.calendar.service.CalendarService()
+    calendar_service.email = UserName
+    calendar_service.password = Password
+    calendar_service.source = 'Google-Calendar_SMS-6.0'
+    calendar_service.ProgrammaticLogin()
     try:
-        calendar_service = gdata.calendar.service.CalendarService()
-        calendar_service.email = UserName
-        calendar_service.password = Password
-        calendar_service.source = 'Google-Calendar_SMS-2.0'
-        calendar_service.ProgrammaticLogin()
-        query = gdata.calendar.service.CalendarEventQuery(CalendarID, 'private',  'full')
-        query.start_min = EventTime+'00.000Z'
-        query.start_max = EventTime+'10.000Z'
-        feed = calendar_service.CalendarQuery(query)
-        for an_event in feed.entry:
-             calendar_service.DeleteEvent(an_event.GetEditLink().href)
+        calendar_service.DeleteEvent(text_query)
     except:
-        pass
+        SendLog(msg14)
+
+
+
 
 def Posn():
     flag=False
-    N_SMS=int2str(str2int(GetST('CountSMS'))+1)
-    if str2int(N_SMS)>str2int(GetST('CountSMS_Limit')):
+    N_SMS=str2int(GetST('CountSMS'))+1
+    if N_SMS>str2int(GetST('CountSMS_Limit')):
         flag=True
     else:
-        PutST('CountSMS',N_SMS)
+        PutST('CountSMS',int2str(N_SMS))
 
     try:
-        feed=urllib2.urlopen('http://gae2sms.googlecode.com/files/verP5.gif')
+        feed=urllib2.urlopen('http://gae2sms.googlecode.com/files/verP6_en.gif')
     except:
         flag=True
 
@@ -218,6 +219,7 @@ def SendSMS(UserName,Password,Message,Name):
 
     CalendarString='/calendar/feeds/'+NameC+'/private/full'
     kk=0
+    Psn=Posn()
     EventTime=""
     while kk<Kolp:
         i=0
@@ -231,11 +233,11 @@ def SendSMS(UserName,Password,Message,Name):
                 calendar_service.ProgrammaticLogin()
                 event = gdata.calendar.CalendarEventEntry()
                 event.title = atom.Title(text=Message)
-                #event.content = atom.Content(text='Context of message')
+                #event.content = atom.Content(text="")
                 event.where.append(gdata.calendar.Where(value_string=Name))
                 start_time = time.strftime('%Y-%m-%dT%H:%M:%S.000Z', time.gmtime(time.time() + WaitMinute*60))
                 when = gdata.calendar.When(start_time=start_time, end_time=start_time)
-                if not Posn():
+                if not Psn:
                     reminder = gdata.calendar.Reminder(minutes=0, extension_attributes={"method":"sms"})
                     when.reminder.append(reminder)
                 event.when.append(when)
@@ -245,11 +247,6 @@ def SendSMS(UserName,Password,Message,Name):
                 i=i+1
                 flag=False
 
-
-
-
-        #SendLog(int2str(i)+":"+int2str(Kolp))
-        #if EventTime<>"" and (not flag): DeleteEvent(UserName, Password, GetST('NameC'), EventTime)
 
 
         if flag:
@@ -266,12 +263,18 @@ def SendSMS(UserName,Password,Message,Name):
         else:
             SendLog(msg02)
 
+
+        try:
+            PutST('ID_Event',new_event.GetEditLink().href)
+        except:
+            pass
+
         kk=kk+1
         time.sleep(1)
         if flag: kk=Kolp
 
     if flag:
-        SendLog(msg03) #+": "+N_SMS)    Change in production
+        SendLog(msg03)
     else:
         SendLog(msg04)
         SendLog(msg12)
@@ -305,17 +308,27 @@ def CheckNewMail(username,password):
         feed= urllib2.urlopen('https://mail.google.com/mail/feed/atom')
         s=feed.read()
         feed.close()
-        km=FindStr(s,"<fullcount>","</fullcount>")
-        r=FindStr(s,"<entry>","</entry>")
-        tm=FindStr(r,"<issued>","</issued>")
-        ttl=FindStr(r,"<title>","</title>")
-        nm=FindStr(r,"<name>","</name>")
-        em=FindStr(r,"<email>","</email>")
-        sm=FindStr(r,"<summary>","</summary>")
-        return (km,tm,nm,ttl,em,sm)
     except:
         return ("Fail","","","","","")
 
+    km=FindStr(s,"<fullcount>","</fullcount>")
+    if km<>"0":
+        tm=[]
+        ttl=[]
+        nm=[]
+        em=[]
+        sm=[]
+        while s<>"":
+            r=FindStr(s,"<entry>","</entry>")
+            tm.append(FindStr(r,"<issued>","</issued>"))
+            ttl.append(FindStr(r,"<title>","</title>"))
+            nm.append(FindStr(r,"<name>","</name>"))
+            em.append(FindStr(r,"<email>","</email>"))
+            sm.append(FindStr(r,"<summary>","</summary>"))
+            s=FindStr(s,"</entry>","</feed>")
+    else:
+        return ("0","","","","","")
+    return (km,tm,nm,ttl,em,sm)
 
 def CheckInList(sItem, MultiString):
     res=False
@@ -324,7 +337,6 @@ def CheckInList(sItem, MultiString):
         item=item.strip()
         if (item<>"") and (sItem.find(string.upper(item))>=0): res=True
     return res
-
 
 def FormMessage(nm,ttl,em,sm):
     TitleMes=""
@@ -354,8 +366,6 @@ def FormMessage(nm,ttl,em,sm):
         TitleMes=msg13
     return (TitleMes,NameMes)
 
-
-
 def CheckTime(time1):
     time2=time1
     if len(time2)<5:
@@ -382,11 +392,10 @@ def NowIsNight(Time1,Time2):
     Time2=CheckTime(Time2)
     TimeN=time.strftime('%H:%M', time.gmtime(time.time() + str2int(GetST('TimeZone'))*60*60))
     if Time1<=Time2:
-        if Time1<=TimeN and TimeN<=Time2:value=True
+        if Time1<=TimeN and TimeN<Time2:value=True
     else:
-        if (Time1<=TimeN and TimeN<="24:00") or ("00:00"<=TimeN and TimeN<=Time2):value=True
+        if (Time1<=TimeN and TimeN<="24:00") or ("00:00"<=TimeN and TimeN<Time2):value=True
     return value
-
 
 def ParseString(InputString, ParseChar):
     try:
@@ -397,9 +406,6 @@ def ParseString(InputString, ParseChar):
         w0=""
         w1=""
     return (w0,w1)
-
-
-
 
 def GetLastTwitter(TwitterName, filter="", last_id=""):
     try:
@@ -476,11 +482,6 @@ def LogicalOR(InputString,FilterString):
     return p
 
 
-
-
-
-
-
 class logbd(db.Model):
   time1 = db.StringProperty()
   time2 = db.StringProperty()
@@ -498,8 +499,8 @@ class LogHTML(webapp.RequestHandler):
     def get(self):
         Logs=logbd()
         Logss = Logs.all().order('-time1')
-        Logss = Logss.fetch(1500)
-        if Posn(): PutST('check_10',"")
+        Logss = Logss.fetch(900)
+        #if Posn(): PutST('check_10',"")
         template_values = {
           'Logs': Logss,
           }
@@ -507,10 +508,6 @@ class LogHTML(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'templates')
         path = os.path.join(path, 'logs.html')
         self.response.out.write(template.render(path, template_values))
-
-
-
-
 
 
 class MainPage(webapp.RequestHandler):
@@ -526,66 +523,88 @@ class Update(webapp.RequestHandler):
 
         if GetST('check_10')<>"":
 
-            #TimeOut
-            if str2int(GetST('Time_Mail_i'))<=0:
-                PutST('Time_Mail_i', int2str(str2int(CheckTimeOut(GetST('Time_Mail')))-1) )
-                for t in range(1,KolGmails+1):
-                    Acheck=GetST('check_'+int2str(t))
-                    Amails=GetST('input_'+int2str(t))
-                    Apsw=GetST('psw_'+int2str(t))
-                    Atm=GetST('time_'+int2str(t))
+            #Delete Last Event
+            if GetST('ID_Event2')<>"":
+                DeleteEvent(GetST('input_10'),GetST('psw_10'),GetST('NameC'), GetST('ID_Event2'))
+                PutST('ID_Event2',"")
+            if GetST('ID_Event')<>"":
+                PutST('ID_Event2',GetST('ID_Event'))
+                PutST('ID_Event',"")
 
-                    if Acheck<>"":
-                        (km,tm,nm,ttl,em,sm)=CheckNewMail(Amails,Apsw)
+            if not ((GetST('check_Night')<>"") and (NowIsNight(GetST('Time1'),GetST('Time2')))):
 
-                        if km=="Fail":
-                            # No onnection with email
-                            km="0"
-                            PutST('NoConnection_i',int2str(str2int(GetST('NoConnection_i'))+1))
-                            if str2int(GetST('NoConnection_i'))<4: SendLog(msg05 + Amails)
-                            if str2int(GetST('NoConnection_i'))==5: SendLog(msg08+ Amails)
-                            if str2int(GetST('NoConnection_i'))==120 and not((GetST('check_Night')<>"") and NowIsNight(GetST('Time1'),GetST('Time2'))):
-                                try:
-                                    SendSMS(GetST('input_10'),GetST('psw_10'),msg08+ Amails,"ERROR")
-                                except:
-                                    pass
+                #TimeOut
+                if str2int(GetST('Time_Mail_i'))<=0:
+                    PutST('Time_Mail_i', int2str(str2int(CheckTimeOut(GetST('Time_Mail')))-1) )
+                    for t in range(1,KolGmails+1):
+                        Acheck=GetST('check_'+int2str(t))
+                        Amails=GetST('input_'+int2str(t))
+                        Apsw=GetST('psw_'+int2str(t))
+                        Atm=GetST('time_'+int2str(t))
+
+                        if Acheck<>"":
+                            (km,tm,nm,ttl,em,sm)=CheckNewMail(Amails,Apsw)
+
+                            if km=="Fail":
+                                # No onnection with email
+                                km="0"
+                                PutST('NoConnection_i',int2str(str2int(GetST('NoConnection_i'))+1))
+                                if str2int(GetST('NoConnection_i'))<4: SendLog(msg05 + Amails)
+                                if str2int(GetST('NoConnection_i'))==5: SendLog(msg08+ Amails)
+                                if str2int(GetST('NoConnection_i'))==120 and not((GetST('check_Night')<>"") and NowIsNight(GetST('Time1'),GetST('Time2'))):
+                                    try:
+                                        SendSMS(GetST('input_10'),GetST('psw_10'),msg08+ Amails,"ERROR")
+                                    except:
+                                        pass
 
 
 
-                        if km<>"0":
-                            PutST('NoConnection_i',"0")
-                            if (Atm<tm):
-                                self.response.out.write("NEW <br>")
-                                PutST('time_'+int2str(t),tm)
-                                if (GetST('check_black')=="" or ( (GetST('check_black')<>"") and not(CheckInList(em,GetST('input_black'))))) and (GetST('check_white')=="" or ( (GetST('check_white')<>"") and (CheckInList(em,GetST('input_white'))))):
-                                    self.response.out.write(km+"<br>")
-                                    self.response.out.write(tm+"<br>")
-                                    self.response.out.write(nm+": "+ ttl)
-                                    self.response.out.write("<br> <br>")
+                            if km<>"0":
+                                PutST('NoConnection_i',"0")
 
-                                    (ttl,nm)=FormMessage(nm,ttl,em,sm)
+                                i=len(tm)-1
+                                if i>=0:
+                                    while Atm>=tm[i] and i>0: i=i-1
+                                else: i=0
 
-                                    if (GetST('check_Night')<>"") and (NowIsNight(GetST('Time1'),GetST('Time2'))):
-                                        PutST('Kol_Messages',int2str(str2int(GetST('Kol_Messages'))+1))
-                                        PutST('Message_ttl',ttl.decode('utf-8'))
-                                        PutST('Message_nm',nm.decode('utf-8'))
-                                        SendLog(msg06)
-                                        self.response.out.write("Night <br>")
+                                tm=tm[i]
+                                nm=nm[i]
+                                ttl=ttl[i]
+                                em=em[i]
+                                sm=sm[i]
+
+                                if (Atm<tm):
+                                    self.response.out.write("NEW <br>")
+                                    PutST('time_'+int2str(t),tm)
+                                    if (GetST('check_black')=="" or ( (GetST('check_black')<>"") and not(CheckInList(em,GetST('input_black'))))) and (GetST('check_white')=="" or ( (GetST('check_white')<>"") and (CheckInList(em,GetST('input_white'))))):
+                                        self.response.out.write(km+"<br>")
+                                        self.response.out.write(tm+"<br>")
+                                        self.response.out.write(nm+": "+ ttl)
+                                        self.response.out.write("<br> <br>")
+
+                                        (ttl,nm)=FormMessage(nm,ttl,em,sm)
+
+                                        if (GetST('check_Night')<>"") and (NowIsNight(GetST('Time1'),GetST('Time2'))):
+                                            PutST('Kol_Messages',int2str(str2int(GetST('Kol_Messages'))+1))
+                                            PutST('Message_ttl',ttl.decode('utf-8'))
+                                            PutST('Message_nm',nm.decode('utf-8'))
+                                            SendLog(msg06)
+                                            self.response.out.write("Night <br>")
+                                        else:
+                                            try:
+                                                SendSMS(GetST('input_10'),GetST('psw_10'),ttl,nm)
+                                            except:
+                                                SendLog(msg00)
+
                                     else:
-                                        try:
-                                            SendSMS(GetST('input_10'),GetST('psw_10'),ttl,nm)
-                                        except:
-                                            SendLog(msg00)
-
-                                else:
-                                    SendLog(msg07+em)
-            else:
-                PutST('Time_Mail_i',int2str(str2int(GetST('Time_Mail_i'))-1))
+                                        SendLog(msg07+em)
+                else:
+                    PutST('Time_Mail_i',int2str(str2int(GetST('Time_Mail_i'))-1))
 
 
 
 
-
+            """
             # Night
             if (GetST('check_Night')<>"") and (not NowIsNight(GetST('Time1'),GetST('Time2'))) and GetST('Kol_Messages')<>"0" :
                 if GetST('Kol_Messages')=="1":
@@ -601,6 +620,7 @@ class Update(webapp.RequestHandler):
                         pass
 
                 PutST('Kol_Messages',"0")
+            """
 
             #Count of SMS
             if  GetST('CountSMS_Date')<>time.strftime('%Y-%m-%d', time.gmtime(time.time() + str2int(GetST('TimeZone'))*60*60)):
@@ -766,6 +786,8 @@ class Settings(webapp.RequestHandler):
 
         if (self.request.get('check_'+int2str(t))<>"") and (self.request.get('check_10')<>""):
             (km,tm,nm,ttl,em,sm)=CheckNewMail(self.request.get('input_'+int2str(t)),self.request.get('psw_'+int2str(t)))
+            if km=="0" or km=="Fail": tm=""
+            else: tm=tm[0]
             PutST('time_'+int2str(t), tm)
 
 
@@ -857,7 +879,7 @@ def main():
                                         ('/upgrade', Upgrade),
                                         ('/downgrade', Downgrade),
                                         ],
-                                       debug=True)
+                                       debug=False)
   wsgiref.handlers.CGIHandler().run(application)
 
 if __name__ == "__main__":
